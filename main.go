@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/matrix-org/gomatrix"
+	"gopkg.in/russross/blackfriday.v2"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -56,7 +57,14 @@ func sendMsgs(client *gomatrix.Client, room string, messages []string) {
 	}
 
 	for _, msg := range messages {
-		_, err = client.SendText(resp.RoomID, msg)
+		formatted := blackfriday.Run([]byte(msg))
+		message := gomatrix.HTMLMessage {
+			Body: msg,
+			MsgType: "m.text",
+			Format: "org.matrix.custom.html",
+			FormattedBody: string(formatted),
+		}
+		_, err := client.SendMessageEvent(resp.RoomID, "m.room.message", message)
 		if err != nil {
 			panic(err)
 		}
