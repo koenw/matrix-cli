@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/matrix-org/gomatrix"
-	"gopkg.in/russross/blackfriday.v2"
+	"github.com/russross/blackfriday/v2"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
